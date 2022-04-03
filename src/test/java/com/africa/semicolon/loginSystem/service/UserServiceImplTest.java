@@ -13,6 +13,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 @DataMongoTest
@@ -34,7 +35,7 @@ class UserServiceImplTest {
         //when
         newUser.setFirstName("adeola");
         newUser.setLastName("oladeji");
-        newUser.setPassword("deeDeji");
+        newUser.setPassword("deeDeji12");
         newUser.setUserName("deji101");
 
 
@@ -52,7 +53,7 @@ class UserServiceImplTest {
 
         newUser.setFirstName("adeola");
         newUser.setLastName("oladeji");
-        newUser.setPassword("deeDeji");
+        newUser.setPassword("deeDeji12");
         newUser.setUserName("deji101");
 
         CreateUserResponse response = userService.createUser(newUser);
@@ -69,10 +70,10 @@ class UserServiceImplTest {
 
         newUser.setFirstName("adeola");
         newUser.setLastName("oladeji");
-        newUser.setPassword("deeDeji764");
+        newUser.setPassword("dee");
         newUser.setUserName("deji101");
 
-        userService.createUser(newUser);
+        assertThrows(IllegalArgumentException.class, ()-> userService.createUser(newUser));
 
 //        assertThat(userService.setPassword(),is(>8));
 

@@ -19,6 +19,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public CreateUserResponse createUser(CreateUserRequest request) {
         User newUser = new User();
+        if(!passwordIsValid(request.getPassword())) throw new IllegalArgumentException("Invalid password");
 
 
         newUser.setFirstName(request.getFirstName().toLowerCase());
@@ -32,6 +33,10 @@ public class UserServiceImpl implements UserService{
         response.setMessage("user registered");
 
         return response;
+    }
+
+    private boolean passwordIsValid(String password) {
+        return password.length() >= 8;
     }
 
     @Override
