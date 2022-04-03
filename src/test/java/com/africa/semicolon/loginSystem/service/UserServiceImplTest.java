@@ -3,6 +3,8 @@ package com.africa.semicolon.loginSystem.service;
 import com.africa.semicolon.loginSystem.data.repository.UserRepo;
 import com.africa.semicolon.loginSystem.dtos.request.CreateUserRequest;
 import com.africa.semicolon.loginSystem.dtos.response.CreateUserResponse;
+import com.africa.semicolon.loginSystem.exception.InvalidPasswordException;
+import com.africa.semicolon.loginSystem.exception.UserAlreadyExistsException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +40,7 @@ class UserServiceImplTest {
         newUser.setPassword("deeDeji12");
         newUser.setUserName("deji101");
 
-
         userService.createUser(newUser);
-
-//
         assertThat(userService.getAllUsers().size(),is(1));
         //assert
     }
@@ -73,10 +72,35 @@ class UserServiceImplTest {
         newUser.setPassword("dee");
         newUser.setUserName("deji101");
 
-        assertThrows(IllegalArgumentException.class, ()-> userService.createUser(newUser));
+        assertThrows(InvalidPasswordException.class, ()-> userService.createUser(newUser));
 
-//        assertThat(userService.setPassword(),is(>8));
+       }
 
-    }
+       @Test
+    public void testThat_A_UserCannotBeRegisteredTwice(){
+
+           //given
+           CreateUserRequest newUser = new CreateUserRequest();
+
+           newUser.setFirstName("adeola");
+           newUser.setLastName("oladeji");
+           newUser.setPassword("deeDeji12");
+           newUser.setUserName("deji101");
+
+           userService.createUser(newUser);
+
+           //given
+           CreateUserRequest anotherUser = new CreateUserRequest();
+
+           anotherUser.setFirstName("adeola");
+           anotherUser.setLastName("oladeji");
+           anotherUser.setPassword("dee");
+           anotherUser.setUserName("deji101");
+
+//           userService.createUser(anotherUser);
+
+           assertThrows(UserAlreadyExistsException.class,()-> userService.createUser(anotherUser));
+
+       }
 
 }

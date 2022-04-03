@@ -4,6 +4,8 @@ import com.africa.semicolon.loginSystem.data.model.User;
 import com.africa.semicolon.loginSystem.data.repository.UserRepo;
 import com.africa.semicolon.loginSystem.dtos.request.CreateUserRequest;
 import com.africa.semicolon.loginSystem.dtos.response.CreateUserResponse;
+import com.africa.semicolon.loginSystem.exception.InvalidPasswordException;
+import com.africa.semicolon.loginSystem.exception.UserAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,19 +14,18 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService{
 
-
     @Autowired
     private UserRepo repository;
 
     @Override
     public CreateUserResponse createUser(CreateUserRequest request) {
         User newUser = new User();
-        if(!passwordIsValid(request.getPassword())) throw new IllegalArgumentException("Invalid password");
+        if(!passwordIsValid(request.getPassword())) throw new InvalidPasswordException("Invalid password");
+        if(userAlreadyExist(request.getUserName())) throw new UserAlreadyExistsException("user already exist");
 
-
-        newUser.setFirstName(request.getFirstName().toLowerCase());
-        newUser.setLastName(request.getLastName().toLowerCase());
-        newUser.setUserName(request.getUserName().toLowerCase());
+        newUser.setFirstName(request.getFirstName());
+        newUser.setLastName(request.getLastName());
+        newUser.setUserName(request.getUserName());
         newUser.setPassword(request.getPassword());
         repository.save(newUser);
 
@@ -33,6 +34,11 @@ public class UserServiceImpl implements UserService{
         response.setMessage("user registered");
 
         return response;
+    }
+
+    private boolean userAlreadyExist(String userName) {
+        User myUser = repository.findByUserName(userName);
+        return myUser != null;
     }
 
     private boolean passwordIsValid(String password) {
