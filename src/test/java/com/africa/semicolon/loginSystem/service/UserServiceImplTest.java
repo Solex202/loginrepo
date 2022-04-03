@@ -1,9 +1,8 @@
 package com.africa.semicolon.loginSystem.service;
 
-import com.africa.semicolon.loginSystem.data.model.User;
 import com.africa.semicolon.loginSystem.data.repository.UserRepo;
-import com.africa.semicolon.loginSystem.dtos.request.UserRequest;
-import com.africa.semicolon.loginSystem.dtos.response.UserResponse;
+import com.africa.semicolon.loginSystem.dtos.request.CreateUserRequest;
+import com.africa.semicolon.loginSystem.dtos.response.CreateUserResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,7 @@ class UserServiceImplTest {
     @Test
     public void saveUserTest(){
         //given
-        UserRequest newUser = new UserRequest();
+        CreateUserRequest newUser = new CreateUserRequest();
         //when
         newUser.setFirstName("adeola");
         newUser.setLastName("oladeji");
@@ -49,16 +48,33 @@ class UserServiceImplTest {
     @Test
     public void testThatResponse_success(){
         //given
-        UserRequest newUser = new UserRequest();
+        CreateUserRequest newUser = new CreateUserRequest();
 
         newUser.setFirstName("adeola");
         newUser.setLastName("oladeji");
         newUser.setPassword("deeDeji");
         newUser.setUserName("deji101");
 
-        UserResponse response = userService.createUser(newUser);
+        CreateUserResponse response = userService.createUser(newUser);
         assertThat(response.getFullName(), is("adeola oladeji"));
         assertThat(response.getMessage(), is("user registered"));
+
+    }
+
+    @Test
+    public void testThatPasswordMustBeGreaterThan0rEqualTo8Characters(){
+
+        //given
+        CreateUserRequest newUser = new CreateUserRequest();
+
+        newUser.setFirstName("adeola");
+        newUser.setLastName("oladeji");
+        newUser.setPassword("deeDeji764");
+        newUser.setUserName("deji101");
+
+        userService.createUser(newUser);
+
+//        assertThat(userService.setPassword(),is(>8));
 
     }
 

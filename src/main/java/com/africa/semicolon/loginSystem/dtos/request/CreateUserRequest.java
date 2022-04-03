@@ -3,7 +3,7 @@ package com.africa.semicolon.loginSystem.dtos.request;
 import lombok.Data;
 
 @Data
-public class UserRequest {
+public class CreateUserRequest {
     private String firstName;
     private String lastName;
     private String userName;
