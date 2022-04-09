@@ -3,7 +3,9 @@ package com.africa.semicolon.loginSystem.service;
 import com.africa.semicolon.loginSystem.data.model.User;
 import com.africa.semicolon.loginSystem.data.repository.UserRepo;
 import com.africa.semicolon.loginSystem.dtos.request.CreateUserRequest;
+import com.africa.semicolon.loginSystem.dtos.request.LoginRequest;
 import com.africa.semicolon.loginSystem.dtos.response.CreateUserResponse;
+import com.africa.semicolon.loginSystem.dtos.response.LoginResponse;
 import com.africa.semicolon.loginSystem.exception.InvalidPasswordException;
 import com.africa.semicolon.loginSystem.exception.UserAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +22,8 @@ public class UserServiceImpl implements UserService{
     @Override
     public CreateUserResponse createUser(CreateUserRequest request) {
         User newUser = new User();
-        if(!passwordIsValid(request.getPassword())) throw new InvalidPasswordException("Invalid password");
         if(userAlreadyExist(request.getUserName())) throw new UserAlreadyExistsException("user already exist");
+        if(!passwordIsValid(request.getPassword())) throw new InvalidPasswordException("Invalid password");
 
         newUser.setFirstName(request.getFirstName());
         newUser.setLastName(request.getLastName());
@@ -48,5 +50,10 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<User> getAllUsers() {
         return repository.findAll();
+    }
+
+    @Override
+    public LoginResponse login(LoginRequest login) {
+        return null;
     }
 }

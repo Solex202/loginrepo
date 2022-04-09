@@ -2,7 +2,9 @@ package com.africa.semicolon.loginSystem.service;
 
 import com.africa.semicolon.loginSystem.data.repository.UserRepo;
 import com.africa.semicolon.loginSystem.dtos.request.CreateUserRequest;
+import com.africa.semicolon.loginSystem.dtos.request.LoginRequest;
 import com.africa.semicolon.loginSystem.dtos.response.CreateUserResponse;
+import com.africa.semicolon.loginSystem.dtos.response.LoginResponse;
 import com.africa.semicolon.loginSystem.exception.InvalidPasswordException;
 import com.africa.semicolon.loginSystem.exception.UserAlreadyExistsException;
 import org.junit.jupiter.api.Test;
@@ -78,28 +80,38 @@ class UserServiceImplTest {
 
        @Test
     public void testThat_A_UserCannotBeRegisteredTwice(){
-
-           //given
+        //given
            CreateUserRequest newUser = new CreateUserRequest();
-
            newUser.setFirstName("adeola");
            newUser.setLastName("oladeji");
            newUser.setPassword("deeDeji12");
            newUser.setUserName("deji101");
 
            userService.createUser(newUser);
-
            //given
            CreateUserRequest anotherUser = new CreateUserRequest();
-
            anotherUser.setFirstName("adeola");
            anotherUser.setLastName("oladeji");
            anotherUser.setPassword("dee");
            anotherUser.setUserName("deji101");
 
-//           userService.createUser(anotherUser);
-
            assertThrows(UserAlreadyExistsException.class,()-> userService.createUser(anotherUser));
+
+       }
+
+       @Test
+       public void testThatUserCanLoginWithUsernameAndPassword(){
+           //given
+           CreateUserRequest newUser = new CreateUserRequest();
+           newUser.setFirstName("adeola");
+           newUser.setLastName("oladeji");
+           newUser.setPassword("deeDeji12");
+           newUser.setUserName("deji101");
+
+           userService.createUser(newUser);
+           LoginRequest login = new LoginRequest("deji101", "deeDeji12");
+           LoginResponse response = userService.login(login);
+           assertThat(response.getMessage(), is("login successful"));
 
        }
 
