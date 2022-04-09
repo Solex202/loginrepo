@@ -5,6 +5,7 @@ import com.africa.semicolon.loginSystem.dtos.request.CreateUserRequest;
 import com.africa.semicolon.loginSystem.dtos.request.LoginRequest;
 import com.africa.semicolon.loginSystem.dtos.response.CreateUserResponse;
 import com.africa.semicolon.loginSystem.dtos.response.LoginResponse;
+import com.africa.semicolon.loginSystem.exception.IncorrectPasswordException;
 import com.africa.semicolon.loginSystem.exception.InvalidPasswordException;
 import com.africa.semicolon.loginSystem.exception.UserAlreadyExistsException;
 import org.junit.jupiter.api.Test;
@@ -109,10 +110,25 @@ class UserServiceImplTest {
            newUser.setUserName("deji101");
 
            userService.createUser(newUser);
-           LoginRequest login = new LoginRequest("deji101", "deeDeji12");
-           LoginResponse response = userService.login(login);
-           assertThat(response.getMessage(), is("login successful"));
+           LoginRequest loginRequest = new LoginRequest("deji101", "deeDeji12");
+           LoginResponse response = userService.login(loginRequest);
+           assertThat(response.getMessage(), is("loginRequest successful"));
 
+       }
+
+       @Test
+        public void testThatUserCannotLoginWithIncorrectPassword(){
+           //given
+           CreateUserRequest newUser = new CreateUserRequest();
+           newUser.setFirstName("adeola");
+           newUser.setLastName("oladeji");
+           newUser.setPassword("deeDeji12");
+           newUser.setUserName("deji101");
+
+           userService.createUser(newUser);
+           LoginRequest loginRequest = new LoginRequest("deji101", "mememe234");
+//           LoginResponse response = userService.login(loginRequest);
+           assertThrows(IncorrectPasswordException.class, ()-> userService.login(loginRequest));
        }
 
 }

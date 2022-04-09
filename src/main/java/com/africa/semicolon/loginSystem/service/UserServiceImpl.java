@@ -6,6 +6,7 @@ import com.africa.semicolon.loginSystem.dtos.request.CreateUserRequest;
 import com.africa.semicolon.loginSystem.dtos.request.LoginRequest;
 import com.africa.semicolon.loginSystem.dtos.response.CreateUserResponse;
 import com.africa.semicolon.loginSystem.dtos.response.LoginResponse;
+import com.africa.semicolon.loginSystem.exception.IncorrectPasswordException;
 import com.africa.semicolon.loginSystem.exception.InvalidPasswordException;
 import com.africa.semicolon.loginSystem.exception.UserAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,24 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public LoginResponse login(LoginRequest login) {
+    public LoginResponse login(LoginRequest loginRequest) {
+        User myUser = repository.findByUserNameAndPassword(loginRequest.getUsername(),loginRequest.getPassword());
+        LoginResponse response = new LoginResponse();
+        if(myUser != null) {
+          response.setMessage("loginRequest successful");
+          return response;
+        }
+
+        if(passwordIsIncorrect(loginRequest.getPassword())) throw new IncorrectPasswordException("incorrect password");
         return null;
+    }
+
+    private boolean passwordIsIncorrect(String password) {
+
+        User myUser = repository.findByPassword(password);
+        if(myUser == null){
+            return true;
+        }
+        return false;
     }
 }
