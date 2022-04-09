@@ -10,12 +10,14 @@ import com.africa.semicolon.loginSystem.exception.IncorrectPasswordException;
 import com.africa.semicolon.loginSystem.exception.InvalidPasswordException;
 import com.africa.semicolon.loginSystem.exception.UserAlreadyExistsException;
 import com.africa.semicolon.loginSystem.exception.UserNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService{
 
     @Autowired
@@ -24,6 +26,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public CreateUserResponse createUser(CreateUserRequest request) {
         User newUser = new User();
+
         if(userAlreadyExist(request.getUserName())) throw new UserAlreadyExistsException("user already exist");
         if(!passwordIsValid(request.getPassword())) throw new InvalidPasswordException("Invalid password");
 
@@ -32,6 +35,7 @@ public class UserServiceImpl implements UserService{
         newUser.setUserName(request.getUserName());
         newUser.setPassword(request.getPassword());
         repository.save(newUser);
+
 
         CreateUserResponse response = new CreateUserResponse();
         response.setFullName(newUser.getFirstName() +" " + newUser.getLastName());
@@ -56,20 +60,27 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
+
+//        if(myUser != null) {
+//          response.setMessage("loginRequest successful");
+//          return response;
+//        }
+//        if(passwordIsIncorrect(loginRequest.getPassword(), loginRequest.getUsername())){
+//            throw new IncorrectPasswordException("incorrect password");
+//        }
+//        if(userDoesnotExist(loginRequest.getPassword(), loginRequest.getUsername())) {
+//            throw new UserNotFoundException("user doesn't exist exception");
+//        }
+        log.info(loginRequest.getUsername(), loginRequest.getPassword());
         User myUser = repository.findByUserNameAndPassword(loginRequest.getUsername(),loginRequest.getPassword());
-        LoginResponse response = new LoginResponse();
-        if(myUser != null) {
-          response.setMessage("loginRequest successful");
-          return response;
+        System.out.println(myUser);
+        if (myUser != null) {
+            LoginResponse response = new LoginResponse();
+            response.setMessage("loginRequest successful");
+            return response;
         }
-        if(passwordIsIncorrect(loginRequest.getPassword(), loginRequest.getUsername())){
-            throw new IncorrectPasswordException("incorrect password");}
-        if(userDoesnotExist(loginRequest.getPassword(), loginRequest.getUsername())) {
-            throw new UserNotFoundException("user doesn't exist exception");
-        }
+        throw new UserNotFoundException("user doesn't exist exception");
 
-
-        return null;
     }
 
     private boolean userDoesnotExist(String password, String username) {
@@ -77,7 +88,7 @@ public class UserServiceImpl implements UserService{
         if(myUser == null){
            return true;
         }
-        return  false;
+        return false;
     }
 
     private boolean passwordIsIncorrect(String password, String username) {

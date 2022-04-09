@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -94,12 +95,11 @@ class UserServiceImplTest {
            CreateUserRequest anotherUser = new CreateUserRequest();
            anotherUser.setFirstName("adeola");
            anotherUser.setLastName("oladeji");
-           anotherUser.setPassword("dee");
+           anotherUser.setPassword("deeDeji12");
            anotherUser.setUserName("deji101");
 
            assertThrows(UserAlreadyExistsException.class,()-> userService.createUser(anotherUser));
-
-       }
+    }
 
        @Test
        public void testThatUserCanLoginWithUsernameAndPassword(){
@@ -107,37 +107,47 @@ class UserServiceImplTest {
            CreateUserRequest newUser = new CreateUserRequest();
            newUser.setFirstName("adeola");
            newUser.setLastName("oladeji");
-           newUser.setPassword("deeDeji12");
            newUser.setUserName("deji101");
+           newUser.setPassword("deeDeji12");
 
            userService.createUser(newUser);
            LoginRequest loginRequest = new LoginRequest("deji101", "deeDeji12");
            LoginResponse response = userService.login(loginRequest);
            assertThat(response.getMessage(), is("loginRequest successful"));
+    }
 
-       }
-
-       @Test
-        public void testThatUserCannotLoginWithIncorrectPassword(){
-           //given
-           CreateUserRequest newUser = new CreateUserRequest();
-           newUser.setFirstName("adeola");
-           newUser.setLastName("oladeji");
-           newUser.setPassword("deeDeji12");
-           newUser.setUserName("deji101");
-
-           userService.createUser(newUser);
-           LoginRequest loginRequest = new LoginRequest("deji101", "mememe234");
-//           LoginResponse response = userService.login(loginRequest);
-           assertThrows(IncorrectPasswordException.class, ()-> userService.login(loginRequest));
-       }
+//       @Test
+//        public void testThatUserCannotLoginWithIncorrectPassword(){
+//           //given
+//           CreateUserRequest newUser = new CreateUserRequest();
+//           newUser.setFirstName("adeola");
+//           newUser.setLastName("oladeji");
+//           newUser.setPassword("deeDeji12");
+//           newUser.setUserName("deji101");
+//
+//           userService.createUser(newUser);
+//           LoginRequest loginRequest = new LoginRequest("deji101", "mememe234");
+////           LoginResponse response = userService.login(loginRequest);
+//           assertThrows(IncorrectPasswordException.class, ()-> userService.login(loginRequest));
+//       }
 
        @Test
         public void testThatNonExistingUserCannotLogin(){
         //given
-           LoginRequest loginRequest = new LoginRequest("deji101", "deeDeji12");
+           //given
+//           CreateUserRequest newUser = new CreateUserRequest();
+//           newUser.setFirstName("adeola");
+//           newUser.setLastName("oladeji");
+//           newUser.setUserName("deji101");
+//           newUser.setPassword("deeDeji12");
+
+//           CreateUserResponse response = userService.createUser(newUser);
+
+           LoginRequest loginRequest = new LoginRequest("deji10", "deeDeji190");
            //assert
            assertThrows(UserNotFoundException.class, ()-> userService.login(loginRequest));
        }
+
+
 
 }
