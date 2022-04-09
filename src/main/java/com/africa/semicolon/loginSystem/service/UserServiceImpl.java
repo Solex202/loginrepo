@@ -9,6 +9,7 @@ import com.africa.semicolon.loginSystem.dtos.response.LoginResponse;
 import com.africa.semicolon.loginSystem.exception.IncorrectPasswordException;
 import com.africa.semicolon.loginSystem.exception.InvalidPasswordException;
 import com.africa.semicolon.loginSystem.exception.UserAlreadyExistsException;
+import com.africa.semicolon.loginSystem.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -61,15 +62,27 @@ public class UserServiceImpl implements UserService{
           response.setMessage("loginRequest successful");
           return response;
         }
+        if(passwordIsIncorrect(loginRequest.getPassword(), loginRequest.getUsername())){
+            throw new IncorrectPasswordException("incorrect password");}
+        if(userDoesnotExist(loginRequest.getPassword(), loginRequest.getUsername())) {
+            throw new UserNotFoundException("user doesn't exist exception");
+        }
 
-        if(passwordIsIncorrect(loginRequest.getPassword())) throw new IncorrectPasswordException("incorrect password");
+
         return null;
     }
 
-    private boolean passwordIsIncorrect(String password) {
-
-        User myUser = repository.findByPassword(password);
+    private boolean userDoesnotExist(String password, String username) {
+        User myUser = repository.findByUserNameAndPassword(password, username);
         if(myUser == null){
+           return true;
+        }
+        return  false;
+    }
+
+    private boolean passwordIsIncorrect(String password, String username) {
+
+        if(repository.findByPassword(password) == null && repository.findByUserName(username) != null){
             return true;
         }
         return false;

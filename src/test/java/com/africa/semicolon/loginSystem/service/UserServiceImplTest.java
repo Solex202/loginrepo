@@ -8,6 +8,7 @@ import com.africa.semicolon.loginSystem.dtos.response.LoginResponse;
 import com.africa.semicolon.loginSystem.exception.IncorrectPasswordException;
 import com.africa.semicolon.loginSystem.exception.InvalidPasswordException;
 import com.africa.semicolon.loginSystem.exception.UserAlreadyExistsException;
+import com.africa.semicolon.loginSystem.exception.UserNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,6 +130,14 @@ class UserServiceImplTest {
            LoginRequest loginRequest = new LoginRequest("deji101", "mememe234");
 //           LoginResponse response = userService.login(loginRequest);
            assertThrows(IncorrectPasswordException.class, ()-> userService.login(loginRequest));
+       }
+
+       @Test
+        public void testThatNonExistingUserCannotLogin(){
+        //given
+           LoginRequest loginRequest = new LoginRequest("deji101", "deeDeji12");
+           //assert
+           assertThrows(UserNotFoundException.class, ()-> userService.login(loginRequest));
        }
 
 }
