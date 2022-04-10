@@ -61,25 +61,28 @@ public class UserServiceImpl implements UserService{
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
 
-//        if(myUser != null) {
-//          response.setMessage("loginRequest successful");
-//          return response;
-//        }
-//        if(passwordIsIncorrect(loginRequest.getPassword(), loginRequest.getUsername())){
-//            throw new IncorrectPasswordException("incorrect password");
-//        }
-//        if(userDoesnotExist(loginRequest.getPassword(), loginRequest.getUsername())) {
-//            throw new UserNotFoundException("user doesn't exist exception");
-//        }
-        log.info(loginRequest.getUsername(), loginRequest.getPassword());
         User myUser = repository.findByUserNameAndPassword(loginRequest.getUsername(),loginRequest.getPassword());
-        System.out.println(myUser);
-        if (myUser != null) {
-            LoginResponse response = new LoginResponse();
+        LoginResponse response = new LoginResponse();
+
+        if(myUser != null) {
+          response.setMessage("loginRequest successful");
+          return response;
+        }
+        if(passwordIsIncorrect(loginRequest.getPassword(), loginRequest.getUsername())){
+            throw new IncorrectPasswordException("incorrect password");
+        }
+        if(userDoesnotExist(loginRequest.getPassword(), loginRequest.getUsername())) {
+            throw new UserNotFoundException("user doesn't exist exception");
+        }
+//        log.info(loginRequest.getUsername(), loginRequest.getPassword());
+//        User myUser = repository.findByUserNameAndPassword(loginRequest.getUsername(),loginRequest.getPassword());
+//        System.out.println(myUser);
+//        if (myUser != null) {
+//            LoginResponse response = new LoginResponse();
             response.setMessage("loginRequest successful");
             return response;
-        }
-        throw new UserNotFoundException("user doesn't exist exception");
+//        }
+//        throw new UserNotFoundException("user doesn't exist exception");
 
     }
 

@@ -1,16 +1,16 @@
 package com.africa.semicolon.loginSystem.controller;
 
 
+import com.africa.semicolon.loginSystem.data.model.User;
 import com.africa.semicolon.loginSystem.dtos.request.CreateUserRequest;
 import com.africa.semicolon.loginSystem.dtos.request.LoginRequest;
 import com.africa.semicolon.loginSystem.dtos.response.CreateUserResponse;
 import com.africa.semicolon.loginSystem.dtos.response.LoginResponse;
 import com.africa.semicolon.loginSystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -27,5 +27,10 @@ public class UserController {
     @PostMapping("/login")
     public LoginResponse response(@RequestBody LoginRequest request){
         return userService.login(request) ;
+    }
+
+    @GetMapping("/getUsers")
+    public List<User> getAllUsers (){
+        return userService.getAllUsers();
     }
 }
