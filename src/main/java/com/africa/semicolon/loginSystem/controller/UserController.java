@@ -7,10 +7,7 @@ import com.africa.semicolon.loginSystem.dtos.request.CreateUserRequest;
 import com.africa.semicolon.loginSystem.dtos.request.LoginRequest;
 import com.africa.semicolon.loginSystem.dtos.response.CreateUserResponse;
 import com.africa.semicolon.loginSystem.dtos.response.LoginResponse;
-import com.africa.semicolon.loginSystem.exception.IncorrectPasswordException;
-import com.africa.semicolon.loginSystem.exception.InvalidPasswordException;
-import com.africa.semicolon.loginSystem.exception.UserAlreadyExistsException;
-import com.africa.semicolon.loginSystem.exception.UserNotFoundException;
+import com.africa.semicolon.loginSystem.exception.*;
 
 import com.africa.semicolon.loginSystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +46,9 @@ public class UserController {
         }
         catch(UserNotFoundException ex){
             return new ResponseEntity<>(new ApiResponse(false, ex.getMessage()), HttpStatus.NOT_FOUND);
+        }
+        catch(IncorrectUsernameException ex){
+            return new ResponseEntity<>(new ApiResponse(false, ex.getMessage()), HttpStatus.UNAUTHORIZED);
         }
 
     }
