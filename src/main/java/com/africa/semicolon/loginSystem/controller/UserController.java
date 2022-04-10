@@ -5,8 +5,6 @@ import com.africa.semicolon.loginSystem.data.model.User;
 import com.africa.semicolon.loginSystem.dtos.ApiResponse;
 import com.africa.semicolon.loginSystem.dtos.request.CreateUserRequest;
 import com.africa.semicolon.loginSystem.dtos.request.LoginRequest;
-import com.africa.semicolon.loginSystem.dtos.response.CreateUserResponse;
-import com.africa.semicolon.loginSystem.dtos.response.LoginResponse;
 import com.africa.semicolon.loginSystem.exception.*;
 
 import com.africa.semicolon.loginSystem.service.UserService;
@@ -41,15 +39,15 @@ public class UserController {
     public ResponseEntity<?> response(@RequestBody LoginRequest request){
         try{
             return new ResponseEntity<>(userService.login(request), HttpStatus.OK);
-        }catch(IncorrectPasswordException ex){
+        }catch(IncorrectUsernameOrPasswordException ex){
             return new ResponseEntity<>(new ApiResponse(false, ex.getMessage()), HttpStatus.UNAUTHORIZED);
         }
         catch(UserNotFoundException ex){
             return new ResponseEntity<>(new ApiResponse(false, ex.getMessage()), HttpStatus.NOT_FOUND);
         }
-        catch(IncorrectUsernameException ex){
-            return new ResponseEntity<>(new ApiResponse(false, ex.getMessage()), HttpStatus.UNAUTHORIZED);
-        }
+//        catch(IncorrectUsernameException ex){
+//            return new ResponseEntity<>(new ApiResponse(false, ex.getMessage()), HttpStatus.UNAUTHORIZED);
+//        }
 
     }
 

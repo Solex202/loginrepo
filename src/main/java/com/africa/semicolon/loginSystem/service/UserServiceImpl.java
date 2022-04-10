@@ -35,7 +35,6 @@ public class UserServiceImpl implements UserService{
         newUser.setPassword(request.getPassword());
         repository.save(newUser);
 
-
         CreateUserResponse response = new CreateUserResponse();
         response.setFullName(newUser.getFirstName() +" " + newUser.getLastName());
         response.setMessage("user registered");
@@ -67,11 +66,11 @@ public class UserServiceImpl implements UserService{
           response.setMessage("loginRequest successful");
           return response;
         }
-        if(usernameIsIncorrect(loginRequest.getUsername(),loginRequest.getPassword())){
-            throw new IncorrectUsernameException("incorrect username");
-        }
+//        if(usernameIsIncorrect(loginRequest.getUsername(),loginRequest.getPassword())){
+//            throw new IncorrectUsernameException("incorrect username");
+//        }
         if(passwordIsIncorrect(loginRequest.getPassword(), loginRequest.getUsername())){
-            throw new IncorrectPasswordException("incorrect password");
+            throw new IncorrectUsernameOrPasswordException("incorrect password or username");
         }
         if(userDoesNotExist(loginRequest.getPassword(), loginRequest.getUsername())) {
             throw new UserNotFoundException("user doesn't exist exception");
@@ -100,12 +99,7 @@ public class UserServiceImpl implements UserService{
         return null;
     }
 
-    private boolean usernameIsIncorrect(String username, String password) {
-        if(repository.findByUserName(username) == null && repository.findByPassword(password) != null){
-            return  true;
-        }
-        return false;
-    }
+//
 
     private boolean userDoesNotExist(String password, String username) {
         User myUser = repository.findByUserNameAndPassword(password, username);
@@ -117,7 +111,7 @@ public class UserServiceImpl implements UserService{
 
     private boolean passwordIsIncorrect(String password, String username) {
 
-        if(repository.findByPassword(password) == null && repository.findByUserName(username) != null){
+        if(repository.findByPassword(password) == null || repository.findByUserName(username) == null){
             return true;
         }
         return false;

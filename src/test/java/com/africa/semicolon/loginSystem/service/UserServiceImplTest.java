@@ -126,7 +126,7 @@ class UserServiceImplTest {
            userService.createUser(newUser);
            LoginRequest loginRequest = new LoginRequest("deji101", "mememe234");
 //           LoginResponse response = userService.login(loginRequest);
-           assertThrows(IncorrectPasswordException.class, ()-> userService.login(loginRequest));
+           assertThrows(IncorrectUsernameOrPasswordException.class, ()-> userService.login(loginRequest));
        }
 
 
@@ -142,47 +142,38 @@ class UserServiceImplTest {
         userService.createUser(newUser);
         LoginRequest loginRequest = new LoginRequest("lotachi123", "deeDeji12");
 //           LoginResponse response = userService.login(loginRequest);
-        assertThrows(IncorrectUsernameException.class, ()-> userService.login(loginRequest));
+        assertThrows(IncorrectUsernameOrPasswordException.class, ()-> userService.login(loginRequest));
     }
 
     @Test
         public void testThatNonExistingUserCannotLogin_throwException(){
-        //given
-           //given
+
+        LoginRequest loginRequest = new LoginRequest("deji10", "deeDeji190");
+           //assert
+           assertThrows(UserNotFoundException.class, ()-> userService.login(loginRequest));
+       }
+
+//       @Test
+//    public void testThatUserCanUpdateUsername(){
+//           //given
 //           CreateUserRequest newUser = new CreateUserRequest();
 //           newUser.setFirstName("adeola");
 //           newUser.setLastName("oladeji");
 //           newUser.setUserName("deji101");
 //           newUser.setPassword("deeDeji12");
-
-//           CreateUserResponse response = userService.createUser(newUser);
-
-           LoginRequest loginRequest = new LoginRequest("deji10", "deeDeji190");
-           //assert
-           assertThrows(UserNotFoundException.class, ()-> userService.login(loginRequest));
-       }
-
-       @Test
-    public void testThatUserCanUpdateUsername(){
-           //given
-           CreateUserRequest newUser = new CreateUserRequest();
-           newUser.setFirstName("adeola");
-           newUser.setLastName("oladeji");
-           newUser.setUserName("deji101");
-           newUser.setPassword("deeDeji12");
-
-           userService.createUser(newUser);
-           LoginRequest loginRequest = new LoginRequest("deji101", "deeDeji12");
-           LoginResponse response = userService.login(loginRequest);
-           assertThat(response.getMessage(), is("loginRequest successful"));
-
-           UpdateRequest updateRequest = new UpdateRequest();
-           UpdateResponse updateUsernameResponse = userService.updateUsername(updateRequest, "deeDeji12");
-           updateRequest.setUserName("ginibby101");
-
-           assertThat(updateUsernameResponse.getMsg(), is("username updated"));
-
-       }
+//
+//           userService.createUser(newUser);
+//           LoginRequest loginRequest = new LoginRequest("deji101", "deeDeji12");
+//           LoginResponse response = userService.login(loginRequest);
+//           assertThat(response.getMessage(), is("loginRequest successful"));
+//
+//           UpdateRequest updateRequest = new UpdateRequest();
+//           UpdateResponse updateUsernameResponse = userService.updateUsername(updateRequest, "deeDeji12");
+//           updateRequest.setUserName("ginibby101");
+//
+//           assertThat(updateUsernameResponse.getMsg(), is("username updated"));
+//
+//       }
 
 
 
