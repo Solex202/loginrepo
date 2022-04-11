@@ -58,31 +58,37 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
+        User myUser = repository.findByUserName(loginRequest.getUsername());
+        if(myUser == null){ throw new IncorrectUsernameException("Incorrect Username");}
+        if(!myUser.getPassword().equals(loginRequest.getPassword())) throw new IncorrectPasswordException("Password is incorrect");
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setMessage("LoginRequest successfull");
+        return loginResponse;
 
-        User myUser = repository.findByUserNameAndPassword(loginRequest.getUsername(),loginRequest.getPassword());
-        LoginResponse response = new LoginResponse();
-
-        if(myUser != null) {
-          response.setMessage("loginRequest successful");
-          return response;
-        }
+//        User myUser = repository.findByUserNameAndPassword(loginRequest.getUsername(),loginRequest.getPassword());
+//        LoginResponse response = new LoginResponse();
+//
+//        if(myUser != null) {
+//          response.setMessage("loginRequest successfull");
+//          return response;
+//        }
 //        if(usernameIsIncorrect(loginRequest.getUsername(),loginRequest.getPassword())){
 //            throw new IncorrectUsernameException("incorrect username");
 //        }
-        if(passwordIsIncorrect(loginRequest.getPassword(), loginRequest.getUsername())){
-            throw new IncorrectUsernameOrPasswordException("incorrect password or username");
-        }
-        if(userDoesNotExist(loginRequest.getPassword(), loginRequest.getUsername())) {
-            throw new UserNotFoundException("user doesn't exist exception");
-        }
+//        if(passwordIsIncorrect(loginRequest.getPassword(), loginRequest.getUsername())){
+//            throw new IncorrectPasswordException("incorrect password or username");
+//        }
+//        if(userDoesNotExist(loginRequest.getPassword(), loginRequest.getUsername())) {
+//            throw new UserNotFoundException("user doesn't exist exception");
+//        }
 
 //        log.info(loginRequest.getUsername(), loginRequest.getPassword());
 //        User myUser = repository.findByUserNameAndPassword(loginRequest.getUsername(),loginRequest.getPassword());
 //        System.out.println(myUser);
 //        if (myUser != null) {
-//            LoginResponse response = new LoginResponse();
-            response.setMessage("loginRequest successful");
-            return response;
+////            LoginResponse response = new LoginResponse();
+//            response.setMessage("loginRequest successful");
+//            return response;
 //        }
 //        throw new UserNotFoundException("user doesn't exist exception");
 

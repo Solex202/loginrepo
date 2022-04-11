@@ -39,15 +39,13 @@ public class UserController {
     public ResponseEntity<?> response(@RequestBody LoginRequest request){
         try{
             return new ResponseEntity<>(userService.login(request), HttpStatus.OK);
-        }catch(IncorrectUsernameOrPasswordException ex){
+        }catch(IncorrectPasswordException | IncorrectUsernameException ex){
             return new ResponseEntity<>(new ApiResponse(false, ex.getMessage()), HttpStatus.UNAUTHORIZED);
         }
-        catch(UserNotFoundException ex){
-            return new ResponseEntity<>(new ApiResponse(false, ex.getMessage()), HttpStatus.NOT_FOUND);
-        }
-//        catch(IncorrectUsernameException ex){
-//            return new ResponseEntity<>(new ApiResponse(false, ex.getMessage()), HttpStatus.UNAUTHORIZED);
+//        catch(UserNotFoundException ex){
+//            return new ResponseEntity<>(new ApiResponse(false, ex.getMessage()), HttpStatus.NOT_FOUND);
 //        }
+
 
     }
 

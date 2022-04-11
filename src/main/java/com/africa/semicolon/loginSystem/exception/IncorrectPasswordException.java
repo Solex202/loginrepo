@@ -1,8 +1,8 @@
 package com.africa.semicolon.loginSystem.exception;
 
-public class IncorrectUsernameOrPasswordException extends RuntimeException{
+public class IncorrectPasswordException extends RuntimeException{
 
-    public IncorrectUsernameOrPasswordException(String msg){
+    public IncorrectPasswordException(String msg){
 
         super(msg);
     }
