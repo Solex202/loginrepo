@@ -3,8 +3,11 @@ package com.africa.semicolon.loginSystem.service;
 import com.africa.semicolon.loginSystem.data.repository.UserRepo;
 import com.africa.semicolon.loginSystem.dtos.request.CreateUserRequest;
 import com.africa.semicolon.loginSystem.dtos.request.LoginRequest;
+import com.africa.semicolon.loginSystem.dtos.request.UpdateRequest;
 import com.africa.semicolon.loginSystem.dtos.response.CreateUserResponse;
+import com.africa.semicolon.loginSystem.dtos.response.FindUserResponse;
 import com.africa.semicolon.loginSystem.dtos.response.LoginResponse;
+import com.africa.semicolon.loginSystem.dtos.response.UpdateResponse;
 import com.africa.semicolon.loginSystem.exception.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -74,8 +77,7 @@ class UserServiceImplTest {
         newUser.setUserName("deji101");
 
         assertThrows(InvalidPasswordException.class, ()-> userService.createUser(newUser));
-
-       }
+    }
 
        @Test
     public void testThat_A_UserCannotBeRegisteredTwice_throwException(){
@@ -123,12 +125,10 @@ class UserServiceImplTest {
 
            userService.createUser(newUser);
            LoginRequest loginRequest = new LoginRequest("deji101", "mememe234");
-//           LoginResponse response = userService.login(loginRequest);
            assertThrows(IncorrectPasswordException.class, ()-> userService.login(loginRequest));
        }
 
-
-    @Test
+       @Test
     public void testThatUserCannotLoginWithIncorrectUsername_throwException(){
         //given
         CreateUserRequest newUser = new CreateUserRequest();
@@ -143,6 +143,72 @@ class UserServiceImplTest {
         assertThrows(IncorrectUsernameException.class, ()-> userService.login(loginRequest));
     }
 
+    @Test
+    public void usernameAlreadyExist_throwException(){
+        //given
+        CreateUserRequest newUser = new CreateUserRequest();
+        newUser.setFirstName("adeola");
+        newUser.setLastName("oladeji");
+        newUser.setPassword("deeDeji12");
+        newUser.setUserName("deji101");
+
+        userService.createUser(newUser);
+        //given
+        CreateUserRequest anotherUser = new CreateUserRequest();
+        anotherUser.setFirstName("dami");
+        anotherUser.setLastName("johnson");
+        anotherUser.setPassword("damidami");
+        anotherUser.setUserName("deji101");
+
+        assertThrows(UsernameAlreadyExistsException.class,()-> userService.createUser(anotherUser));
+
+    }
+
+    @Test
+    public void testFindBy(){
+        //given
+        CreateUserRequest newUser = new CreateUserRequest();
+        newUser.setFirstName("adeola");
+        newUser.setLastName("oladeji");
+        newUser.setPassword("deeDeji12");
+        newUser.setUserName("deji101");
+
+        userService.createUser(newUser);
+        //given
+        CreateUserRequest anotherUser = new CreateUserRequest();
+        anotherUser.setFirstName("dami");
+        anotherUser.setLastName("johnson");
+        anotherUser.setPassword("damidami");
+        anotherUser.setUserName("johnson202");
+        userService.createUser(anotherUser);
+
+        FindUserResponse response = userService.findByUserName("johnson202");
+        assertThat(response.getFirstName(),is("dami"));
+        assertThat(response.getLastName(),is("johnson"));
+        assertThat(response.getUserName(),is("johnson202"));
+    }
+
+    @Test
+    public  void testThatIfNoUserIsFound_throwException(){
+        //given
+        CreateUserRequest newUser = new CreateUserRequest();
+        newUser.setFirstName("adeola");
+        newUser.setLastName("oladeji");
+        newUser.setPassword("deeDeji12");
+        newUser.setUserName("deji101");
+
+        userService.createUser(newUser);
+        //given
+        CreateUserRequest anotherUser = new CreateUserRequest();
+        anotherUser.setFirstName("dami");
+        anotherUser.setLastName("johnson");
+        anotherUser.setPassword("damidami");
+        anotherUser.setUserName("johnson202");
+        userService.createUser(anotherUser);
+
+        assertThrows(UserNotFoundException.class, ()-> userService.findByUserName("lota"));
+    }
+
 //    @Test
 //        public void testThatNonExistingUserCannotLogin_throwException(){
 //
@@ -151,27 +217,27 @@ class UserServiceImplTest {
 //           assertThrows(UserNotFoundException.class, ()-> userService.login(loginRequest));
 //       }
 
-//       @Test
-//    public void testThatUserCanUpdateUsername(){
-//           //given
-//           CreateUserRequest newUser = new CreateUserRequest();
-//           newUser.setFirstName("adeola");
-//           newUser.setLastName("oladeji");
-//           newUser.setUserName("deji101");
-//           newUser.setPassword("deeDeji12");
-//
-//           userService.createUser(newUser);
-//           LoginRequest loginRequest = new LoginRequest("deji101", "deeDeji12");
-//           LoginResponse response = userService.login(loginRequest);
-//           assertThat(response.getMessage(), is("loginRequest successful"));
-//
-//           UpdateRequest updateRequest = new UpdateRequest();
-//           UpdateResponse updateUsernameResponse = userService.updateUsername(updateRequest, "deeDeji12");
-//           updateRequest.setUserName("ginibby101");
-//
-//           assertThat(updateUsernameResponse.getMsg(), is("username updated"));
-//
-//       }
+       @Test
+    public void testThatUserCanUpdateUsername(){
+           //given
+           CreateUserRequest newUser = new CreateUserRequest();
+           newUser.setFirstName("adeola");
+           newUser.setLastName("oladeji");
+           newUser.setUserName("deji101");
+           newUser.setPassword("deeDeji12");
+
+           userService.createUser(newUser);
+           LoginRequest loginRequest = new LoginRequest("deji101", "deeDeji12");
+           LoginResponse response = userService.login(loginRequest);
+           assertThat(response.getMessage(), is("LoginRequest successfull"));
+
+           UpdateRequest updateRequest = new UpdateRequest();
+           UpdateResponse updateUsernameResponse = userService.updateUsername(updateRequest, "deeDeji12");
+           updateRequest.setUserName("ginibby101");
+
+           assertThat(updateUsernameResponse.getMsg(), is("username updated"));
+
+       }
 
 
 
