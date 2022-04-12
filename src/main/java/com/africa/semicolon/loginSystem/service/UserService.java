@@ -4,10 +4,7 @@ import com.africa.semicolon.loginSystem.data.model.User;
 import com.africa.semicolon.loginSystem.dtos.request.CreateUserRequest;
 import com.africa.semicolon.loginSystem.dtos.request.LoginRequest;
 import com.africa.semicolon.loginSystem.dtos.request.UpdateRequest;
-import com.africa.semicolon.loginSystem.dtos.response.CreateUserResponse;
-import com.africa.semicolon.loginSystem.dtos.response.FindUserResponse;
-import com.africa.semicolon.loginSystem.dtos.response.LoginResponse;
-import com.africa.semicolon.loginSystem.dtos.response.UpdateResponse;
+import com.africa.semicolon.loginSystem.dtos.response.*;
 
 import java.util.List;
 
@@ -21,4 +18,6 @@ public interface UserService {
     UpdateResponse updateUsername(UpdateRequest updateUsernameRequest, String password);
 
     FindUserResponse findByUserName(String johnson202);
+
+    DeleteResponse deleteByUsername(String username);
 }

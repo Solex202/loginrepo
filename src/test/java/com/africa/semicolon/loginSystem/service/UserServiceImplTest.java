@@ -4,10 +4,7 @@ import com.africa.semicolon.loginSystem.data.repository.UserRepo;
 import com.africa.semicolon.loginSystem.dtos.request.CreateUserRequest;
 import com.africa.semicolon.loginSystem.dtos.request.LoginRequest;
 import com.africa.semicolon.loginSystem.dtos.request.UpdateRequest;
-import com.africa.semicolon.loginSystem.dtos.response.CreateUserResponse;
-import com.africa.semicolon.loginSystem.dtos.response.FindUserResponse;
-import com.africa.semicolon.loginSystem.dtos.response.LoginResponse;
-import com.africa.semicolon.loginSystem.dtos.response.UpdateResponse;
+import com.africa.semicolon.loginSystem.dtos.response.*;
 import com.africa.semicolon.loginSystem.exception.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -111,7 +108,7 @@ class UserServiceImplTest {
            userService.createUser(newUser);
            LoginRequest loginRequest = new LoginRequest("deji101", "deeDeji12");
            LoginResponse response = userService.login(loginRequest);
-           assertThat(response.getMessage(), is("LoginRequest successfull"));
+           assertThat(response.getMessage(), is("LoginRequest successful"));
     }
 
        @Test
@@ -229,14 +226,36 @@ class UserServiceImplTest {
            userService.createUser(newUser);
            LoginRequest loginRequest = new LoginRequest("deji101", "deeDeji12");
            LoginResponse response = userService.login(loginRequest);
-           assertThat(response.getMessage(), is("LoginRequest successfull"));
+           assertThat(response.getMessage(), is("LoginRequest successful"));
 
            UpdateRequest updateRequest = new UpdateRequest();
-           UpdateResponse updateUsernameResponse = userService.updateUsername(updateRequest, "deeDeji12");
+           UpdateResponse updateResponse = userService.updateUsername(updateRequest, "deeDeji12");
            updateRequest.setUserName("ginibby101");
 
-           assertThat(updateUsernameResponse.getMsg(), is("username updated"));
+           assertThat(updateResponse.getMsg(), is("username updated"));
 
+       }
+
+       @Test
+    public void testThatUserCanBeDeleted(){
+           CreateUserRequest newUser = new CreateUserRequest();
+           newUser.setFirstName("adeola");
+           newUser.setLastName("oladeji");
+           newUser.setPassword("deeDeji12");
+           newUser.setUserName("deji101");
+
+           userService.createUser(newUser);
+           //given
+           CreateUserRequest anotherUser = new CreateUserRequest();
+           anotherUser.setFirstName("dami");
+           anotherUser.setLastName("johnson");
+           anotherUser.setPassword("damidami");
+           anotherUser.setUserName("johnson202");
+           userService.createUser(anotherUser);
+
+           DeleteResponse response = userService.deleteByUsername("johnson202");
+
+           assertThat(response.getMessage(),is("user deleted"));
        }
 
 

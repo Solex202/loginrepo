@@ -5,10 +5,7 @@ import com.africa.semicolon.loginSystem.data.repository.UserRepo;
 import com.africa.semicolon.loginSystem.dtos.request.CreateUserRequest;
 import com.africa.semicolon.loginSystem.dtos.request.LoginRequest;
 import com.africa.semicolon.loginSystem.dtos.request.UpdateRequest;
-import com.africa.semicolon.loginSystem.dtos.response.CreateUserResponse;
-import com.africa.semicolon.loginSystem.dtos.response.FindUserResponse;
-import com.africa.semicolon.loginSystem.dtos.response.LoginResponse;
-import com.africa.semicolon.loginSystem.dtos.response.UpdateResponse;
+import com.africa.semicolon.loginSystem.dtos.response.*;
 import com.africa.semicolon.loginSystem.exception.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,16 +44,11 @@ public class UserServiceImpl implements UserService{
     private boolean usernameAlreadyExist(String userName) {
 
         return repository.findByUserName(userName) != null ;
-//        return myUser != null;
     }
 
     private boolean userAlreadyExist(String userName, String password) {
-//        for (int i = 0; i < getAllUsers().size(); i++) {
-//            if(getAllUsers().get(i).getUserName())
-//
-//        }
+
         return repository.findByUserName(userName) != null &&  repository.findByPassword(password) != null;
-//        return myUser != null;
     }
 
     private boolean passwordIsValid(String password) {
@@ -74,7 +66,7 @@ public class UserServiceImpl implements UserService{
         if(myUser == null){ throw new IncorrectUsernameException("Incorrect Username");}
         if(!myUser.getPassword().equals(loginRequest.getPassword())) throw new IncorrectPasswordException("Password is incorrect");
         LoginResponse loginResponse = new LoginResponse();
-        loginResponse.setMessage("LoginRequest successfull");
+        loginResponse.setMessage("LoginRequest successful");
         return loginResponse;
 
     }
@@ -99,6 +91,17 @@ public class UserServiceImpl implements UserService{
         response.setFirstName(myUser.getFirstName());
         response.setLastName(myUser.getLastName());
         response.setUserName(myUser.getUserName());
+
+        return response;
+    }
+
+    @Override
+    public DeleteResponse deleteByUsername(String username) {
+        User myUser = repository.findByUserName(username);
+        DeleteResponse response = new DeleteResponse();
+        repository.delete(myUser);
+
+        response.setMessage("user deleted");
 
         return response;
     }

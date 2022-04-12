@@ -60,4 +60,9 @@ public class UserController {
             return new ResponseEntity<>(new ApiResponse(false,ex.getMessage()), HttpStatus.NOT_FOUND);
         }
     }
+
+    @DeleteMapping("deleteBy/{username}")
+    public ResponseEntity<?> deleteUser(@PathVariable String username){
+        return new ResponseEntity<>(userService.deleteByUsername(username), HttpStatus.OK);
+    }
 }
