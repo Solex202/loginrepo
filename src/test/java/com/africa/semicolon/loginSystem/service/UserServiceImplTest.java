@@ -46,6 +46,29 @@ class UserServiceImplTest {
         //assert
     }
 
+//    @Test
+//    public void deleteAllUsersTest(){
+//        //given
+//        CreateUserRequest newUser = new CreateUserRequest();
+//        newUser.setFirstName("adeola");
+//        newUser.setLastName("oladeji");
+//        newUser.setPassword("deeDeji12");
+//        newUser.setUserName("deji101");
+//
+//        userService.createUser(newUser);
+//        //given
+//        CreateUserRequest anotherUser = new CreateUserRequest();
+//        anotherUser.setFirstName("dami");
+//        anotherUser.setLastName("johnson");
+//        anotherUser.setPassword("damidami");
+//        anotherUser.setUserName("johnson202");
+//        userService.createUser(anotherUser);
+////        assertThat(userService.getAllUsers().size(),is(2));
+//
+//        DeleteResponse response = userService.deleteAllUsers();
+//        assertThat(response.getMessage(),is("all users deleted"));
+//    }
+
     @Test
     public void testThatResponse_success(){
         //given
@@ -229,12 +252,36 @@ class UserServiceImplTest {
            assertThat(response.getMessage(), is("LoginRequest successful"));
 
            UpdateRequest updateRequest = new UpdateRequest();
-           UpdateResponse updateResponse = userService.updateUsername(updateRequest, "deeDeji12");
-           updateRequest.setUserName("ginibby101");
+           updateRequest.setOldUsername("deji101");
+           updateRequest.setNewUsername("ginika1");
+           UpdateResponse updateResponse = userService.updateUsername( "deeDeji12",updateRequest);
 
            assertThat(updateResponse.getMsg(), is("username updated"));
 
        }
+
+    @Test
+    public void testThatUserCanUpdateFirstname(){
+        //given
+        CreateUserRequest newUser = new CreateUserRequest();
+        newUser.setFirstName("adeola");
+        newUser.setLastName("oladeji");
+        newUser.setUserName("deji101");
+        newUser.setPassword("deeDeji12");
+
+        userService.createUser(newUser);
+        LoginRequest loginRequest = new LoginRequest("deji101", "deeDeji12");
+        LoginResponse response = userService.login(loginRequest);
+        assertThat(response.getMessage(), is("LoginRequest successful"));
+
+        UpdateRequest updateRequest = new UpdateRequest();
+        updateRequest.setOldFirstName("adeola");
+        updateRequest.setNewUsername("mmesoma");
+        UpdateResponse updateResponse = userService.updateFirstName( "deeDeji12",updateRequest);
+
+        assertThat(updateResponse.getMsg(), is("first name updated"));
+
+    }
 
        @Test
     public void testThatUserCanBeDeleted(){

@@ -6,6 +6,7 @@ import com.africa.semicolon.loginSystem.dtos.request.LoginRequest;
 import com.africa.semicolon.loginSystem.dtos.request.UpdateRequest;
 import com.africa.semicolon.loginSystem.dtos.response.*;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface UserService {
@@ -13,11 +14,18 @@ public interface UserService {
 
     List<User> getAllUsers();
 
+//    List<User> deleteAllUsers();
+
     LoginResponse login(LoginRequest login);
 
-    UpdateResponse updateUsername(UpdateRequest updateUsernameRequest, String password);
 
     FindUserResponse findByUserName(String johnson202);
 
     DeleteResponse deleteByUsername(String username);
+
+    UpdateResponse updateUsername(String password, UpdateRequest updateRequest);
+
+    DeleteResponse deleteAllUsers();
+
+    UpdateResponse updateFirstName(String password, UpdateRequest updateRequest);
 }

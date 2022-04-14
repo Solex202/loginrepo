@@ -71,16 +71,16 @@ public class UserServiceImpl implements UserService{
 
     }
 
-    @Override
-    public UpdateResponse updateUsername(UpdateRequest updateRequest, String password) {
-        User myUser = repository.findByUserNameAndPassword(updateRequest.getUserName(), updateRequest.getPassword());
-        UpdateResponse response = new UpdateResponse();
-        if (myUser != null){
-            updateRequest.setUserName("ginibby101");
-            response.setMsg("username updated");
-        }
-        return response;
-    }
+//    @Override
+//    public UpdateResponse updateUsername(UpdateRequest updateRequest, String password) {
+//        User myUser = repository.findByUserNameAndPassword(updateRequest.getUserName(), updateRequest.getPassword());
+//        UpdateResponse response = new UpdateResponse();
+//        if (myUser != null){
+//            updateRequest.setUserName("ginibby101");
+//            response.setMsg("username updated");
+//        }
+//        return response;
+//    }
 
     @Override
     public FindUserResponse findByUserName(String username) {
@@ -103,6 +103,35 @@ public class UserServiceImpl implements UserService{
 
         response.setMessage("user deleted");
 
+        return response;
+    }
+
+    @Override
+    public UpdateResponse updateUsername(String password, UpdateRequest updateRequest) {
+        User myUser = repository.findByUserName(updateRequest.getOldUsername());
+        UpdateResponse response = new UpdateResponse();
+        if (myUser != null && myUser.getPassword().equals(password)){
+            myUser.setUserName(updateRequest.getNewUsername());
+            repository.save(myUser);
+            response.setMsg("username updated");
+        }
+        return response;
+    }
+
+    @Override
+    public DeleteResponse deleteAllUsers() {
+        return null;
+    }
+
+    @Override
+    public UpdateResponse updateFirstName(String password, UpdateRequest updateRequest) {
+        User myUser = repository.findByUserName(updateRequest.getOldFirstName());
+        UpdateResponse response = new UpdateResponse();
+        if(myUser != null && myUser.getPassword().equals(password)){
+            myUser.setFirstName(updateRequest.getNewFirstName());
+            repository.save(myUser);
+            response.setMsg("first name updated");
+        }
         return response;
     }
 

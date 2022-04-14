@@ -12,8 +12,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UpdateRequest {
 
-    private String firstName;
+    private String oldFirstName;
+    private String newFirstName;
     private String lastName;
-    private String userName;
+    private String oldUsername;
+    private String newUsername;
     private String password;
 }
