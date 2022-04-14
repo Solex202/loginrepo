@@ -276,10 +276,35 @@ class UserServiceImplTest {
 
         UpdateRequest updateRequest = new UpdateRequest();
         updateRequest.setOldFirstName("adeola");
-        updateRequest.setNewUsername("mmesoma");
+        updateRequest.setNewFirstName("mmesoma");
+        updateRequest.setOldUsername("deji101");
         UpdateResponse updateResponse = userService.updateFirstName( "deeDeji12",updateRequest);
 
         assertThat(updateResponse.getMsg(), is("first name updated"));
+
+    }
+
+    @Test
+    public void testThatUserCanUpdatePassword(){
+        //given
+        CreateUserRequest newUser = new CreateUserRequest();
+        newUser.setFirstName("adeola");
+        newUser.setLastName("oladeji");
+        newUser.setUserName("deji101");
+        newUser.setPassword("deeDeji12");
+
+        userService.createUser(newUser);
+        LoginRequest loginRequest = new LoginRequest("deji101", "deeDeji12");
+        LoginResponse response = userService.login(loginRequest);
+        assertThat(response.getMessage(), is("LoginRequest successful"));
+
+        UpdateRequest updateRequest = new UpdateRequest();
+        updateRequest.setOldPassword("deeDeji12");
+        updateRequest.setNewPassword("dejideji201");
+        updateRequest.setOldUsername("deji101");
+        UpdateResponse updateResponse = userService.updatePassword( "deeDeji12",updateRequest);
+
+        assertThat(updateResponse.getMsg(), is("password updated"));
 
     }
 

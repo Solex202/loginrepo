@@ -19,13 +19,16 @@ public interface UserService {
     LoginResponse login(LoginRequest login);
 
 
-    FindUserResponse findByUserName(String johnson202);
+    FindUserResponse findByUserName(String username);
 
     DeleteResponse deleteByUsername(String username);
 
     UpdateResponse updateUsername(String password, UpdateRequest updateRequest);
 
-    DeleteResponse deleteAllUsers();
+//    DeleteResponse deleteAllUsers();
 
     UpdateResponse updateFirstName(String password, UpdateRequest updateRequest);
+
+
+    UpdateResponse updatePassword(String password, UpdateRequest updateRequest);
 }

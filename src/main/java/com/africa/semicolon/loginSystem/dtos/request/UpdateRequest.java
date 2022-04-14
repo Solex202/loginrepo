@@ -17,5 +17,6 @@ public class UpdateRequest {
     private String lastName;
     private String oldUsername;
     private String newUsername;
-    private String password;
+    private String oldPassword;
+    private String newPassword;
 }

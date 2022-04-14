@@ -118,14 +118,10 @@ public class UserServiceImpl implements UserService{
         return response;
     }
 
-    @Override
-    public DeleteResponse deleteAllUsers() {
-        return null;
-    }
 
     @Override
     public UpdateResponse updateFirstName(String password, UpdateRequest updateRequest) {
-        User myUser = repository.findByUserName(updateRequest.getOldFirstName());
+        User myUser = repository.findByUserName(updateRequest.getOldUsername());
         UpdateResponse response = new UpdateResponse();
         if(myUser != null && myUser.getPassword().equals(password)){
             myUser.setFirstName(updateRequest.getNewFirstName());
@@ -134,6 +130,22 @@ public class UserServiceImpl implements UserService{
         }
         return response;
     }
+
+    @Override
+    public UpdateResponse updatePassword(String password, UpdateRequest updateRequest) {
+        User myUser = repository.findByUserName(updateRequest.getOldUsername());
+        UpdateResponse response = new UpdateResponse();
+        if(myUser != null && myUser.getPassword().equals(password)){
+            myUser.setPassword(updateRequest.getOldPassword());
+            repository.save(myUser);
+            response.setMsg("password updated");
+        }
+        return response;
+    }
+//    @Override
+//    public DeleteResponse deleteAllUsers() {
+//        return null;
+//    }
 
     private boolean userDoesNotExist(String username) {
         return repository.findByUserName(username) == null;
