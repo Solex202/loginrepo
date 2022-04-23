@@ -14,7 +14,8 @@ public class UpdateRequest {
 
     private String oldFirstName;
     private String newFirstName;
-    private String lastName;
+    private String oldLastName;
+    private String newLastName;
     private String oldUsername;
     private String newUsername;
     private String oldPassword;

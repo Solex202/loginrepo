@@ -42,8 +42,8 @@ class UserServiceImplTest {
         newUser.setUserName("deji101");
 
         userService.createUser(newUser);
-        assertThat(userService.getAllUsers().size(),is(1));
         //assert
+        assertThat(userService.getAllUsers().size(),is(1));
     }
 
 //    @Test
@@ -87,7 +87,6 @@ class UserServiceImplTest {
 
     @Test
     public void testThatPasswordMustBeGreaterThan0rEqualTo8Characters_throwException(){
-
         //given
         CreateUserRequest newUser = new CreateUserRequest();
 
@@ -229,13 +228,6 @@ class UserServiceImplTest {
         assertThrows(UserNotFoundException.class, ()-> userService.findByUserName("lota"));
     }
 
-//    @Test
-//        public void testThatNonExistingUserCannotLogin_throwException(){
-//
-//        LoginRequest loginRequest = new LoginRequest("deji10", "deeDeji190");
-//           //assert
-//           assertThrows(UserNotFoundException.class, ()-> userService.login(loginRequest));
-//       }
 
        @Test
     public void testThatUserCanUpdateUsername(){
@@ -285,6 +277,30 @@ class UserServiceImplTest {
     }
 
     @Test
+    public void testThatUserCanUpdateLastname(){
+        //given
+        CreateUserRequest newUser = new CreateUserRequest();
+        newUser.setFirstName("adeola");
+        newUser.setLastName("oladeji");
+        newUser.setUserName("deji101");
+        newUser.setPassword("deeDeji12");
+
+        userService.createUser(newUser);
+        LoginRequest loginRequest = new LoginRequest("deji101", "deeDeji12");
+        LoginResponse response = userService.login(loginRequest);
+        assertThat(response.getMessage(), is("LoginRequest successful"));
+
+        UpdateRequest updateRequest = new UpdateRequest();
+        updateRequest.setOldLastName("adeola");
+        updateRequest.setNewLastName("mmesoma");
+        updateRequest.setOldUsername("deji101");
+        UpdateResponse updateResponse = userService.updateLastName( "deeDeji12",updateRequest);
+
+        assertThat(updateResponse.getMsg(), is("last name updated"));
+
+    }
+
+    @Test
     public void testThatUserCanUpdatePassword(){
         //given
         CreateUserRequest newUser = new CreateUserRequest();
@@ -303,7 +319,7 @@ class UserServiceImplTest {
         updateRequest.setNewPassword("dejideji201");
         updateRequest.setOldUsername("deji101");
         UpdateResponse updateResponse = userService.updatePassword( "deeDeji12",updateRequest);
-
+//        dejideji201
         assertThat(updateResponse.getMsg(), is("password updated"));
 
     }

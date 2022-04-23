@@ -5,7 +5,7 @@ import com.africa.semicolon.loginSystem.data.model.User;
 import com.africa.semicolon.loginSystem.dtos.ApiResponse;
 import com.africa.semicolon.loginSystem.dtos.request.CreateUserRequest;
 import com.africa.semicolon.loginSystem.dtos.request.LoginRequest;
-import com.africa.semicolon.loginSystem.dtos.response.FindUserResponse;
+import com.africa.semicolon.loginSystem.dtos.request.UpdateRequest;
 import com.africa.semicolon.loginSystem.exception.*;
 
 import com.africa.semicolon.loginSystem.service.UserService;
@@ -64,5 +64,23 @@ public class UserController {
     @DeleteMapping("deleteBy/{username}")
     public ResponseEntity<?> deleteUser(@PathVariable String username){
         return new ResponseEntity<>(userService.deleteByUsername(username), HttpStatus.OK);
+    }
+
+    @PatchMapping("/updateUsername")
+    public ResponseEntity<?> updateByUsername(@RequestBody String password, UpdateRequest request){
+        return new ResponseEntity<>(userService.updateUsername(password,request),HttpStatus.OK);
+    }
+
+    @PatchMapping("/updateLastname")
+    public  ResponseEntity<?> updateByLastname(@RequestBody  String password, UpdateRequest request){
+        return  new ResponseEntity<>(userService.updateLastName(password,request),HttpStatus.OK);
+    }
+    @PatchMapping("/updateFirstname")
+    public  ResponseEntity<?> updateByFirstname(@RequestBody  String password, UpdateRequest request){
+        return  new ResponseEntity<>(userService.updateFirstName(password,request),HttpStatus.OK);
+    }
+    @PatchMapping("/updatePassword")
+    public  ResponseEntity<?> updateByPassword(@RequestBody  String password, UpdateRequest request){
+        return  new ResponseEntity<>(userService.updatePassword(password,request),HttpStatus.OK);
     }
 }

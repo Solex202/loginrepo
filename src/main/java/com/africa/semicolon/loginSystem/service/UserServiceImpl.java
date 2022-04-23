@@ -121,11 +121,12 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UpdateResponse updateFirstName(String password, UpdateRequest updateRequest) {
+
         User myUser = repository.findByUserName(updateRequest.getOldUsername());
         UpdateResponse response = new UpdateResponse();
         if(myUser != null && myUser.getPassword().equals(password)){
             myUser.setFirstName(updateRequest.getNewFirstName());
-            repository.save(myUser);
+           repository.save(myUser);
             response.setMsg("first name updated");
         }
         return response;
@@ -133,12 +134,27 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UpdateResponse updatePassword(String password, UpdateRequest updateRequest) {
+//        if(updateRequest.getNewPassword() < 8) throw  new InvalidPasswordException("password is invalid");?
         User myUser = repository.findByUserName(updateRequest.getOldUsername());
         UpdateResponse response = new UpdateResponse();
         if(myUser != null && myUser.getPassword().equals(password)){
             myUser.setPassword(updateRequest.getOldPassword());
+
             repository.save(myUser);
             response.setMsg("password updated");
+        }
+        return response;
+    }
+
+    @Override
+    public UpdateResponse updateLastName(String password, UpdateRequest updateRequest) {
+
+        User myUser = repository.findByUserName(updateRequest.getOldUsername());
+        UpdateResponse response = new UpdateResponse();
+        if(myUser != null && myUser.getPassword().equals(password)){
+            myUser.setLastName(updateRequest.getNewLastName());
+            repository.save(myUser);
+            response.setMsg("last name updated");
         }
         return response;
     }
